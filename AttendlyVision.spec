@@ -1,12 +1,7 @@
 # Build with: python -m PyInstaller --noconfirm AttendlyVision.spec
-from PyInstaller.utils.hooks import collect_all, copy_metadata
+from PyInstaller.utils.hooks import collect_dynamic_libs, copy_metadata
 
-datas, binaries, hiddenimports = [], [], []
-for package in ('insightface', 'onnxruntime'):
-    d, b, h = collect_all(package)
-    datas += d
-    binaries += b
-    hiddenimports += h
+datas, binaries, hiddenimports = [], collect_dynamic_libs('onnxruntime'), []
 datas += copy_metadata('insightface')
 
 a = Analysis(
@@ -16,9 +11,16 @@ a = Analysis(
     datas=datas,
     hiddenimports=hiddenimports + ['openpyxl'],
     excludes=['torch', 'tensorflow', 'keras', 'mxnet', 'IPython',
-              'notebook', 'pytest', 'PySide2', 'PySide6', 'PyQt6'],
+              'notebook', 'pytest', 'PySide2', 'PySide6', 'PyQt6',
+              'insightface.gui', 'insightface.commands', 'insightface.app.mask_renderer',
+              'insightface.thirdparty.face3d', 'onnx.reference',
+              'onnxruntime.quantization', 'onnxruntime.transformers',
+              'sklearn', 'matplotlib', 'pip'],
     noarchive=False,
 )
+# Third-party sample models, photos and reports are not application assets.
+a.datas = [entry for entry in a.datas
+           if not entry[0].lower().endswith(('.onnx', '.jpg', '.jpeg', '.pdf', '.xlsx'))]
 pyz = PYZ(a.pure)
 exe = EXE(pyz, a.scripts, [], exclude_binaries=True,
           name='AttendlyVision', debug=False, strip=False, upx=False,

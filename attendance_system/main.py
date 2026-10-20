@@ -3,6 +3,12 @@ import os
 import traceback
 from config import BASE_DIR
 
+# Windowed executables have no console; model download progress still needs streams.
+if sys.stdout is None:
+    sys.stdout = open(os.devnull, 'w', encoding='utf-8')
+if sys.stderr is None:
+    sys.stderr = open(os.devnull, 'w', encoding='utf-8')
+
 def global_exception_handler(exc_type, exc_value, exc_traceback):
     with open(os.path.join(BASE_DIR, 'error_log.txt'), 'a', encoding='utf-8') as f:
         f.write('Uncaught exception:\n')

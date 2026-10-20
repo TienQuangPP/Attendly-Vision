@@ -6,7 +6,7 @@ Nhận diện ArcFace, phát hiện khuôn mặt SCRFD, giao diện tiếng Vi�
 
 ## Tải và chạy
 
-Tải `AttendlyVision-Windows-x64.zip` tại **Releases**, giải nén toàn bộ rồi mở
+Tải `AttendlyVision-Windows-x64.zip` tại [Releases](https://github.com/TienQuangPP/Attendly-Vision/releases/latest), giải nén toàn bộ rồi mở
 `AttendlyVision.exe`. Giữ thư mục `_internal` cạnh file EXE; không cần cài Python.
 Lần đầu vào phiên điểm danh cần Internet để InsightFace tải mô hình `buffalo_sc`.
 Các lần tiếp theo có thể dùng webcam và nhận diện ngoại tuyến.
