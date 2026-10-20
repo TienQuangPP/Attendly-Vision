@@ -96,6 +96,10 @@ if __name__ == '__main__':
             engine = get_insight_app()
             assert 'detection' in engine.models and 'recognition' in engine.models
             assert not engine.get(np.zeros((480, 640, 3), dtype=np.uint8))
+            from insightface.utils.face_align import norm_crop, arcface_dst
+            aligned = norm_crop(np.zeros((112, 112, 3), dtype=np.uint8), arcface_dst)
+            embedding = engine.models['recognition'].get_feat(aligned)
+            assert embedding.shape == (1, 512) and np.isfinite(embedding).all()
             result['model_inference'] = True
         with open(os.path.join(BASE_DIR, 'self-test.json'), 'w', encoding='utf-8') as f:
             json.dump(result, f, ensure_ascii=False, indent=2)
